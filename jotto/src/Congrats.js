@@ -1,9 +1,5 @@
 import PropTypes from 'prop-types';
 
-Congrats.protoTypes = {
-    success: PropTypes.bool.isRequired,
-};
-
 export default function Congrats({success}) {
    return success
        ? <div data-test="component-congrats" className="alert alert-success">
@@ -13,3 +9,7 @@ export default function Congrats({success}) {
          </div>
        : <div data-test="component-congrats" />
 }
+
+Congrats.protoTypes = {
+    success: PropTypes.bool.isRequired,
+};
