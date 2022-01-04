@@ -1,11 +1,13 @@
-import Enzyme, {shallow} from 'enzyme';
-import EnzymeAdapter from "@wojtekmaj/enzyme-adapter-react-17";
+import {shallow} from "enzyme";
 import Congrats from "./Congrats";
-import {findByTestAttr} from "../test/testUtils";
+import {checkProps, findByTestAttr} from "../test/testUtils";
 
-Enzyme.configure({adapter: new EnzymeAdapter});
+const defaultProps = {success: false};
 
-const setup = (props={}) => shallow(<Congrats {...props}/>);
+const setup = (props={}) => {
+    const setupProps = {...defaultProps, ...props};
+    return shallow(<Congrats {...setupProps}/>);
+}
 
 test('renders without error', () => {
     const wrapper = setup();
@@ -23,5 +25,10 @@ test('renders non-empty congrats message when success prop is true', () => {
     const wrapper = setup({success: true});
     const message = findByTestAttr(wrapper, 'congrats-message').text();
     expect(message.length).toBeGreaterThan(0);
+});
+
+test('does not throw warning with expected props', () => {
+  const expectedProps = {success: false};
+  checkProps(Congrats, expectedProps);
 });
 
