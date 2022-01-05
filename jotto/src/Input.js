@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import React from "react";
+import {useSelector} from "react-redux";
 
-export default function Input({success, secretWord}){
+export default function Input({secretWord}){
     const [currentGuess, setCurrentGuess] = React.useState("");
+    const success = useSelector(state => state.success.success);
     if(success) {
         return <div data-test="input-component"/>
-    }
-    return <div data-test="input-component">
+    } else {
+        return <div data-test="input-component">
             <form className="form-inline">
                 <input
                     data-test="input-box"
@@ -25,9 +27,9 @@ export default function Input({success, secretWord}){
                 >Submit</button>
             </form>
         </div>
+    }
 }
 
 Input.protoTypes = {
-    success: PropTypes.bool.isRequired,
     secretWord: PropTypes.string.isRequired,
 };

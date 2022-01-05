@@ -1,12 +1,16 @@
 import App from "./App";
 import {mount} from "enzyme";
-import {findByTestAttr} from "../test/testUtils";
+import {findByTestAttr, storeFactory} from "../test/testUtils";
+import {Provider} from "react-redux";
 
 //activate global mock
 jest.mock('./actions');
 import {getSecretWord as mockGetSecretWord} from "./actions";
 
-const setup = () => mount(<App />);
+const setup = () => {
+    const store = storeFactory();
+    return mount(<Provider store={store}><App /></Provider>)
+};
 
 test('renders without error', () => {
     const wrapper = setup();

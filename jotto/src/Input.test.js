@@ -1,7 +1,8 @@
 import Input from "./Input";
-import {shallow} from "enzyme";
-import {checkProps, findByTestAttr} from "../test/testUtils";
+import {mount} from "enzyme";
+import {checkProps, findByTestAttr, storeFactory} from "../test/testUtils";
 import React from "react";
+import {Provider} from "react-redux";
 
 //mock entire module for destructuring useState on import
 // const mockSetCurrentGuess = jest.fn();
@@ -10,15 +11,16 @@ import React from "react";
 //     useState: (initialState) => [initialState, mockSetCurrentGuess]
 // }));
 
-const setup = (success=false, secretWord ='party') => {
-    return shallow(<Input success={success} secretWord={secretWord}/>);
+const setup = (initialState={}, secretWord ='party') => {
+    const store = storeFactory(initialState);
+    return mount(<Provider store={store}><Input secretWord={secretWord}/></Provider>);
 }
 
 describe('render', () => {
     describe('success is true', () => {
         let wrapper;
         beforeEach(()=> {
-            wrapper = setup(true);
+            wrapper = setup({success: true});
         });
         test('renders without error', () => {
             const component = findByTestAttr(wrapper, 'input-component');
@@ -36,7 +38,7 @@ describe('render', () => {
     describe('success is false', () => {
         let wrapper;
         beforeEach(()=> {
-            wrapper = setup(false);
+            wrapper = setup({success: false});
         });
         test('renders without error', () => {
             const component = findByTestAttr(wrapper, 'input-component');
@@ -50,7 +52,6 @@ describe('render', () => {
             const submitButton = findByTestAttr(wrapper, 'submit-button');
             expect(submitButton.exists()).toBeTruthy();
         });
-
     });
 });
 
@@ -70,13 +71,13 @@ describe('state controlled input field', () => {
        React.useState = originalUseState;
     });
     test('state updates with value of input box upon change', () => {
-       const inputBox = findByTestAttr(setup(), 'input-box');
+       const inputBox = findByTestAttr(setup({success: false}), 'input-box');
        const mockEvent = { target: {value: 'train'}};
        inputBox.simulate('change', mockEvent);
        expect(mockSetCurrentGuess).toHaveBeenCalledWith('train');
    });
    test('field is cleared upon submit button click', () => {
-       const submitButton = findByTestAttr(setup(), 'submit-button');
+       const submitButton = findByTestAttr(setup({success: false}), 'submit-button');
        submitButton.simulate('click', {preventDefault() {}});
        expect(mockSetCurrentGuess).toHaveBeenCalledWith('');
    });
