@@ -1,9 +1,9 @@
 import { actionTypes } from '../actions';
 
-export default (state=false, action) => {
+export default (state='', action) => {
     switch(action.type) {
-        case (actionTypes.CORRECT_GUESS):
-            return true;
+        case actionTypes.SET_SECRET_WORD:
+            return action.payload
         default:
             return state;
     }

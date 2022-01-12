@@ -1,15 +1,24 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function Congrats({success}) {
-   return success
-       ? <div data-test="component-congrats" className="alert alert-success">
-          <span data-test="congrats-message">
+const Congrats = (props) => {
+    if (props.success) {
+        return (
+            <div data-test="component-congrats" className="alert alert-success">
+        <span data-test="congrats-message">
           Congratulations! You guessed the word!
-          </span>
-         </div>
-       : <div data-test="component-congrats" />
-}
+        </span>
+            </div>
+        );
+    } else {
+        return (
+            <div data-test="component-congrats" />
+        );
+    }
+};
 
-Congrats.protoTypes = {
+Congrats.propTypes = {
     success: PropTypes.bool.isRequired,
 };
+
+export default Congrats;

@@ -1,14 +1,20 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React from "react";
-import {useSelector} from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function Input({secretWord}){
+import { guessWord } from './actions';
+
+function Input({ secretWord }) {
     const [currentGuess, setCurrentGuess] = React.useState("");
-    const success = useSelector(state => state.success.success);
-    if(success) {
-        return <div data-test="input-component"/>
-    } else {
-        return <div data-test="input-component">
+    const dispatch = useDispatch();
+    const success = useSelector(state => state.success);
+
+    if (success) {
+        return <div data-test='component-input' />
+    }
+
+    return (
+        <div data-test='component-input'>
             <form className="form-inline">
                 <input
                     data-test="input-box"
@@ -16,20 +22,26 @@ export default function Input({secretWord}){
                     type="text"
                     placeholder="enter guess"
                     value={currentGuess}
-                    onChange={(e) => setCurrentGuess(e.target.value)}
+                    onChange={(event) => setCurrentGuess(event.target.value)}
                 />
-                <button data-test="submit-button"
-                        className="btn btn-primary mb-2"
-                        onClick={(e)=>{
-                            e.preventDefault();
-                            setCurrentGuess("");
-                        }}
-                >Submit</button>
+                <button
+                    data-test="submit-button"
+                    onClick={(evt) => {
+                        evt.preventDefault();
+                        dispatch(guessWord(currentGuess));
+                        setCurrentGuess("");
+                    }}
+                    className="btn btn-primary mb-2"
+                >
+                    Submit
+                </button>
             </form>
         </div>
-    }
+    );
 }
 
-Input.protoTypes = {
+Input.propTypes = {
     secretWord: PropTypes.string.isRequired,
 };
+
+export default Input;
